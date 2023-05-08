@@ -163,5 +163,80 @@ namespace TransGr8_DD_Test.Tests
 			// Assert
 			Assert.False(result);
 		}
-	}
+
+
+		//update
+        [Test]
+        public void CanUserCastSpell_Should_ReturnFalse_When_SpellRequiresSomaticComponent_And_UserDoesNotHaveIt()
+        {
+            // Arrange
+            var spells = new List<Spell>
+            {
+                new Spell
+                {
+                    Name = "Cure Wounds",
+                    Level = 1,
+                    CastingTime = "1 action",
+                    Components = "V, S",
+                    Range = 1,
+                    Duration = "Instantaneous",
+                    SavingThrow = ""
+                }
+            };
+            var user = new User
+            {
+                Level = 1,
+                HasVerbalComponent = true,
+                HasMaterialComponent = false,
+                Range = 1,
+                HasConcentration = false
+            };
+            var spellChecker = new SpellChecker(spells);
+
+            // Act
+            var canCast = spellChecker.CanUserCastSpell(user, "Cure Wounds");
+
+            // Assert
+            Assert.IsFalse(canCast);
+        }
+
+        [Test]
+        public void CanUserCastSpell_Should_ReturnTrue_When_SpellRequiresSomaticComponent_And_UserHasIt()
+        {
+            // Arrange
+            var spells = new List<Spell>
+            {
+                new Spell
+                {
+                    Name = "Cure Wounds",
+                    Level = 1,
+                    CastingTime = "1 action",
+                    Components = "V, S",
+                    Range = 1,
+                    Duration = "Instantaneous",
+                    SavingThrow = ""
+                }
+            };
+            var user = new User
+            {
+                Level = 1,
+                HasVerbalComponent = true,
+                HasSomaticComponent = true,
+                HasMaterialComponent = false,
+                Range = 1,
+                HasConcentration = false
+            };
+            var spellChecker = new SpellChecker(spells);
+
+            // Act
+            var canCast = spellChecker.CanUserCastSpell(user, "Cure Wounds");
+
+            // Assert
+            Assert.IsTrue(canCast);
+        }
+
+
+
+
+    }
 }
